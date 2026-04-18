@@ -169,6 +169,7 @@ def main():
     st.markdown("---")
     
     # 使用 columns 實現輸入框 + 按鈕的組合
+    with st.form(key="stock_form", clear_on_submit=False):
     col1, col2, col3 = st.columns([8, 2, 1])
     with col1:
         stock_code = st.text_input(
@@ -178,10 +179,9 @@ def main():
             key="stock_input"
         )
     with col2:
-        analyze_btn = st.button("🔍 分析", type="primary", use_container_width=True)
+        analyze_btn = st.form_submit_button("🔍 分析", type="primary", use_container_width=True)
     with col3:
-        # 清空按鈕（可選）
-        if st.button("🗑️", use_container_width=True, help="清空結果"):
+        clear_btn = st.form_submit_button("🗑️", use_container_width=True, help="清空結果")
             st.session_state.last_result = None
             result_placeholder.empty()
             st.rerun()
