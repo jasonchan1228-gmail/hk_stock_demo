@@ -138,15 +138,31 @@ def calculate_trade_prices(current_price: float, hist_data: pd.DataFrame, max_di
 def main():
     st.markdown("<h1 style='text-align: center; margin-bottom: 10px;'>📊 港股分析工具</h1>", 
                 unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #888; margin-bottom: 30px;'>輸入港股代號，按 Enter 獲取交易建議</p>", 
+    st.markdown("<p style='text-align: center; color: #888; margin-bottom: 20px;'>輸入港股代號，按 Enter 獲取交易建議</p>", 
                 unsafe_allow_html=True)
+    
+    # ===== 可折疊參數面板（移至此處，不再使用側邊欄）=====
+    with st.expander("⚙️ 分析參數設定", expanded=False):
+        max_discount = st.slider(
+            "買入價最低折扣",
+            min_value=0.70,
+            max_value=0.95,
+            value=0.85,
+            step=0.01,
+            help="建議買入價不得低於現價的此比例。\n例如 0.85 表示最多只能低於現價 15%。"
+        )
+        col_a, col_b = st.columns(2)
+        with col_a:
+            st.caption("📡 數據源：Yahoo Finance")
+        with col_b:
+            st.caption("🕒 更新頻率：每日收市後")
     
     result_placeholder = st.empty()
     
     if 'last_result' not in st.session_state:
         st.session_state.last_result = None
     
-    # ===== 使用 st.form 實現回車觸發（注意縮排！）=====
+    # ===== 使用 st.form 實現回車觸發 =====
     with st.form(key="stock_form", clear_on_submit=False):
         col1, col2, col3 = st.columns([8, 2, 1])
         with col1:
